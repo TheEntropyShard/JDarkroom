@@ -1,3 +1,20 @@
+/*      JDarkroom. Reimplementation of Darkroom website.
+ *      Copyright (C) 2023 TheEntropyShard
+ *
+ *      This program is free software: you can redistribute it and/or modify
+ *      it under the terms of the GNU General Public License as published by
+ *      the Free Software Foundation, either version 3 of the License, or
+ *      (at your option) any later version.
+ *
+ *      This program is distributed in the hope that it will be useful,
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *      GNU General Public License for more details.
+ *
+ *      You should have received a copy of the GNU General Public License
+ *      along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package me.theentropyshard.jdarkroom;
 
 import java.util.Collections;
@@ -68,6 +85,7 @@ public final class DecodingData {
      */
     public static final Map<String, Byte> CODE_INDEX_TABLE = Collections.unmodifiableMap(
             new HashMap<String, Byte>() {{
+                // @formatter:off
                 this.put("A", (byte) 0); this.put("А", (byte) 0);
                 this.put("B", (byte) 1); this.put("Б", (byte) 1);
                 this.put("C", (byte) 2); this.put("Ц", (byte) 2);
@@ -132,6 +150,7 @@ public final class DecodingData {
                 this.put("9", (byte) 61); // this.put("K", (byte) 10);
                 this.put("?", (byte) 62); // this.put("K", (byte) 10);
                 this.put("!", (byte) 63); // this.put("K", (byte) 10);
+                // @formatter:on
             }}
     );
 }

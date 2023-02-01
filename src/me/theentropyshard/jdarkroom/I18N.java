@@ -56,9 +56,9 @@ public enum I18N {
     }
 
     public static String getString(String key) {
-        if(key.indexOf(".") == 2) {
+        /*if(key.indexOf(".") == 2) {
             return I18N.TRANSLATION.get(key);
-        }
+        }*/
         return I18N.TRANSLATION.get(I18N.LANGUAGE + "." + key);
     }
 }

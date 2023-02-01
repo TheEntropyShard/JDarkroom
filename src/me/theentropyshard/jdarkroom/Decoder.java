@@ -23,7 +23,7 @@ public enum Decoder {
     public static String decodeInternetCode(String code) {
         byte[] bytes = new byte[16];
         for(int i = 0; i < 16; i++) {
-            bytes[i] = DecodingData.CODE_INDEX_TABLE.get(Character.toString(code.charAt(i)));
+            bytes[i] = DecodingData.FROM_INTERNET_CODE.get(code.charAt(i));
         }
 
         for(int i = 6; i > 0; i--) {
@@ -35,12 +35,10 @@ public enum Decoder {
             Utils.swapBits(byte1, byte2, bi1, bi2, bytes);
         }
 
-        String bin = Integer.toBinaryString(bytes[bytes.length - 1]);
-        int index = Integer.parseInt(bin.substring(0, 3), 2);
+        int index = (bytes[15] >> 3) & 0b111;
 
         byte firstRoundKey = DecodingData.KEY[index];
         byte secondRoundKey = DecodingData.KEY[DecodingData.KEY.length - 1 - index];
-
         for(int i = 30; i > 0; i--) {
             int m = (i * firstRoundKey + 45) % 90;
             int n = (i * secondRoundKey + 45) % 90;
@@ -55,8 +53,7 @@ public enum Decoder {
             Utils.swapBits(byte1, byte2, bi1, bi2, bytes);
         }
 
-        byte thirdRoundKey = DecodingData.KEY[bytes[bytes.length - 1] & 0b111];
-
+        byte thirdRoundKey = DecodingData.KEY[bytes[15] & 0b111];
         for(int i = 40; i > 0; i--) {
             int m = i * thirdRoundKey % 90;
             int n = m % 6;
@@ -78,20 +75,23 @@ public enum Decoder {
         intCode |= (bytes[10] & (0x0000000C >> 2)) << 2;
         intCode |= (bytes[11] & (0x00000003 << 4)) >> 4;
 
-        int l1 = Integer.parseInt(Integer.toHexString((intCode >> 24) & 0xFF), 10);
-        int d1 = Integer.parseInt(Integer.toHexString((intCode >> 16) & 0xFF), 16);
-        int l2 = Integer.parseInt(Integer.toHexString((intCode >> 8) & 0xFF), 16);
-        int d2 = Integer.parseInt(Integer.toHexString((intCode >> 0) & 0xFF), 16);
+        int l1 = (intCode >> 24) & 0xFF;
+        int d1 = (intCode >> 16) & 0xFF;
+        int l2 = (intCode >> 8) & 0xFF;
+        int d2 = (intCode >> 0) & 0xFF;
 
-        String[] letters1 = DecodingData.SAVE_INDEX_TABLE.get(l1 + 1).split("\\s");
-        String[] letters2 = DecodingData.SAVE_INDEX_TABLE.get(l2 + 1).split("\\s");
+        String[] letters1 = DecodingData.BYTES_TO_CODE.get(Integer.valueOf(l1).byteValue());
+        String[] letters2 = DecodingData.BYTES_TO_CODE.get(Integer.valueOf(l2).byteValue());
 
+        // From https://9214.github.io/13
+        // "Recall that locker code is stored in letter-digit-letter-digit format – letter
+        // is a letter index from 0-based A-Z alphabet, and digit is actual digit."
         String russianCode = letters1[1] + d1 + letters2[1] + d2;
         String englishCode = letters1[0] + d1 + letters2[0] + d2;
 
+        // I could put this in PRSF (private static final), but it might be not initialized yet
         String russianLabel = I18N.getString("codeLabelRu");
         String englishLabel = I18N.getString("codeLabelEn");
-        String andText = I18N.getString("andText");
-        return String.format("%s: %s %s %s: %s", russianLabel, russianCode, andText, englishLabel, englishCode);
+        return String.format("%s: %s %s %s: %s", russianLabel, russianCode, I18N.getString("andText"), englishLabel, englishCode);
     }
 }

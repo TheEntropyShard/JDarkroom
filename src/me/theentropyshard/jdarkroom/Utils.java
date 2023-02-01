@@ -70,4 +70,10 @@ public enum Utils {
             bytes[byteInd1] |= 1 << bi1;
         }
     }
+
+    /*public static final class StrIntBiMap extends HashMap<String, Integer> {
+        public Integer getValueByKey(String key) {
+
+        }
+    }*/
 }

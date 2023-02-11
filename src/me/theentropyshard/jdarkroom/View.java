@@ -223,6 +223,7 @@ public final class View extends JPanel {
         cardLayout.show(this, "dropFilePanel");
 
         JFrame frame = new JFrame("JDarkroom");
+        frame.setResizable(false);
         frame.add(this, BorderLayout.CENTER);
         frame.pack();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

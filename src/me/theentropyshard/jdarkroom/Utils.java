@@ -39,10 +39,8 @@ public enum Utils {
             Utils.IMAGE_CACHE.put(path, bufferedImage);
             return bufferedImage;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     /**
@@ -70,10 +68,4 @@ public enum Utils {
             bytes[byteInd1] |= 1 << bi1;
         }
     }
-
-    /*public static final class StrIntBiMap extends HashMap<String, Integer> {
-        public Integer getValueByKey(String key) {
-
-        }
-    }*/
 }

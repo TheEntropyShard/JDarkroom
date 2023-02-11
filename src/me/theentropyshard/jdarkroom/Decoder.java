@@ -63,22 +63,29 @@ public enum Decoder {
             bytes[byteInd] ^= (1 << bitInd);
         }
 
-        return Decoder.readInternetCode(bytes);
+        return Decoder.getGameInfo(bytes);
     }
 
-    private static String readInternetCode(byte[] bytes) {
+    public static String getGameInfo(byte[] bytes) {
+        String resultLabel = I18N.getString("resultLabel");
+        String[] internetCodes = Decoder.readInternetCode(bytes).split("_");
+        String totalPlaytime = Decoder.readTotalPlaytime(bytes);
+        return String.format(resultLabel, internetCodes[0], internetCodes[1], totalPlaytime);
+    }
+
+    public static String readInternetCode(byte[] bytes) {
         int intCode = 0;
-        intCode |= (bytes[8] & (0x1E000000 >> 25)) << 25;
-        intCode |= (bytes[9] & (0x01000000 >> 19)) << 19;
-        intCode |= (bytes[9] & (0x00001F00 >> 8)) << 8;
+        intCode |= (bytes[8]  & (0x1E000000 >> 25)) << 25;
+        intCode |= (bytes[9]  & (0x01000000 >> 19)) << 19;
+        intCode |= (bytes[9]  & (0x00001F00 >>  8)) <<  8;
         intCode |= (bytes[10] & (0x001F0000 >> 14)) << 14;
-        intCode |= (bytes[10] & (0x0000000C >> 2)) << 2;
-        intCode |= (bytes[11] & (0x00000003 << 4)) >> 4;
+        intCode |= (bytes[10] & (0x0000000C >>  2)) <<  2;
+        intCode |= (bytes[11] & (0x00000003 <<  4)) >>  4;
 
         int l1 = (intCode >> 24) & 0xFF;
         int d1 = (intCode >> 16) & 0xFF;
-        int l2 = (intCode >> 8) & 0xFF;
-        int d2 = (intCode >> 0) & 0xFF;
+        int l2 = (intCode >>  8) & 0xFF;
+        int d2 = (intCode >>  0) & 0xFF;
 
         String[] letters1 = DecodingData.BYTES_TO_CODE.get(Integer.valueOf(l1).byteValue());
         String[] letters2 = DecodingData.BYTES_TO_CODE.get(Integer.valueOf(l2).byteValue());
@@ -89,9 +96,12 @@ public enum Decoder {
         String russianCode = letters1[1] + d1 + letters2[1] + d2;
         String englishCode = letters1[0] + d1 + letters2[0] + d2;
 
-        // I could put this in PRSF (private static final), but it might be not initialized yet
-        String russianLabel = I18N.getString("codeLabelRu");
-        String englishLabel = I18N.getString("codeLabelEn");
-        return String.format("%s: %s %s %s: %s", russianLabel, russianCode, I18N.getString("andText"), englishLabel, englishCode);
+        return russianCode + "_" + englishCode;
+    }
+
+    public static String readTotalPlaytime(byte[] bytes) {
+        return (bytes[14] < 10 ? "0" + bytes[14] : "" + bytes[14]) + ":" +
+               (bytes[13] < 10 ? "0" + bytes[13] : "" + bytes[13]) + ":" +
+               (bytes[15] < 10 ? "0" + bytes[15] : "" + bytes[15]);
     }
 }

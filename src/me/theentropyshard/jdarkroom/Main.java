@@ -24,8 +24,8 @@ import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) {
-        Pattern localePattern = Pattern.compile("([a-z]{2})-([A-Z]{2})$");
         if(args.length > 0) {
+            Pattern localePattern = Pattern.compile("([a-z]{2})-([A-Z]{2})$");
             Matcher matcher = localePattern.matcher(args[0]);
             if(matcher.matches()) {
                 try {
@@ -34,6 +34,8 @@ public class Main {
                 } catch (Exception se) {
                     se.printStackTrace();
                 }
+            } else {
+                System.err.println("Incorrect locale supplied: " + args[0]);
             }
         }
 

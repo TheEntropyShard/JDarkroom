@@ -19,17 +19,6 @@ package me.theentropyshard.jdarkroom;
 
 public class JDarkroom {
     public JDarkroom() {
-        if(instance != null) {
-            throw new IllegalStateException("JDarkroom already running!");
-        }
-        instance = this;
-
         new View();
-    }
-
-    private static JDarkroom instance;
-
-    public static JDarkroom getInstance() {
-        return instance;
     }
 }

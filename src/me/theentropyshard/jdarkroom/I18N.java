@@ -45,20 +45,11 @@ public enum I18N {
         I18N.TRANSLATION.put("en.badFile", "Bad file given!");
         I18N.TRANSLATION.put("ru.badFile", "Перемещен плохой файл!");
 
-        I18N.TRANSLATION.put("ru.andText", "и");
-        I18N.TRANSLATION.put("en.andText", "and");
-
-        I18N.TRANSLATION.put("ru.codeLabelRu", "Русский код");
-        I18N.TRANSLATION.put("ru.codeLabelEn", "Английский код");
-
-        I18N.TRANSLATION.put("en.codeLabelRu", "Russian code");
-        I18N.TRANSLATION.put("en.codeLabelEn", "English code");
+        I18N.TRANSLATION.put("en.resultLabel", "<html>Russian code: %s and English code: %s<br>Total time played: %s</html>");
+        I18N.TRANSLATION.put("ru.resultLabel", "<html>Русский код: %s и Английский код: %s<br>Всего времени отыграно: %s</html>");
     }
 
     public static String getString(String key) {
-        /*if(key.indexOf(".") == 2) {
-            return I18N.TRANSLATION.get(key);
-        }*/
         return I18N.TRANSLATION.get(I18N.LANGUAGE + "." + key);
     }
 }

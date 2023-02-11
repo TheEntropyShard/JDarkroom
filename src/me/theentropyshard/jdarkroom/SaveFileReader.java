@@ -31,6 +31,7 @@ public enum SaveFileReader {
 
         StringBuilder russianCode = new StringBuilder();
         StringBuilder englishCode = new StringBuilder();
+        String totalPlaytime = "00:00:00";
         try(RandomAccessFile raf = new RandomAccessFile(file, "r")) {
             if(raf.length() <= 0) {
                 return null;
@@ -51,9 +52,7 @@ public enum SaveFileReader {
             return null;
         }
 
-        String russianLabel = I18N.getString("codeLabelRu");
-        String englishLabel = I18N.getString("codeLabelEn");
-        String andText = I18N.getString("andText");
-        return String.format("%s: %s %s %s: %s", russianLabel, russianCode, andText, englishLabel, englishCode);
+        String resultLabel = I18N.getString("resultLabel");
+        return String.format(resultLabel, russianCode, englishCode, totalPlaytime);
     }
 }

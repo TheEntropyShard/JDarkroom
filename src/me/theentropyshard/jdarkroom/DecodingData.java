@@ -30,6 +30,11 @@ public enum DecodingData {
     public static final long CODE_OFFSET = 0x00002D58L;
 
     /**
+     * Offset, where total play time in seconds located in save
+     */
+    public static final long TOTAL_PLAYTIME_OFFSET = 0x00000D4CL;
+
+    /**
      * Key for decoding Internet Code
      */
     public static final byte[] KEY = {

@@ -68,12 +68,12 @@ public enum Decoder {
 
     public static String getGameInfo(byte[] bytes) {
         String resultLabel = I18N.getString("resultLabel");
-        String[] internetCodes = Decoder.readInternetCode(bytes).split("_");
+        String[] internetCodes = Decoder.readCode(bytes).split("_");
         String totalPlaytime = Decoder.readTotalPlaytime(bytes);
         return String.format(resultLabel, internetCodes[0], internetCodes[1], totalPlaytime);
     }
 
-    public static String readInternetCode(byte[] bytes) {
+    public static String readCode(byte[] bytes) {
         int intCode = 0;
         intCode |= (bytes[8]  & (0x1E000000 >> 25)) << 25;
         intCode |= (bytes[9]  & (0x01000000 >> 19)) << 19;

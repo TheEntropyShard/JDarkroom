@@ -1,2 +1,2 @@
 @ECHO OFF
-java -jar JDarkroom.jar ru-RU
+java -jar JDarkroom.jar ru

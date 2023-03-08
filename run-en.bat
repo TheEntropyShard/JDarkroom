@@ -1,2 +1,2 @@
 @ECHO OFF
-java -jar JDarkroom.jar en-US
+java -jar JDarkroom.jar en

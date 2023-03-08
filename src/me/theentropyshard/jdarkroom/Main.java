@@ -19,23 +19,19 @@ package me.theentropyshard.jdarkroom;
 
 import javax.swing.*;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) {
         if(args.length > 0) {
-            Pattern localePattern = Pattern.compile("([a-z]{2})-([A-Z]{2})$");
-            Matcher matcher = localePattern.matcher(args[0]);
-            if(matcher.matches()) {
-                try {
-                    String[] langAndCountry = args[0].split("-");
-                    Locale.setDefault(new Locale(langAndCountry[0], langAndCountry[1]));
-                } catch (Exception se) {
-                    se.printStackTrace();
-                }
-            } else {
-                System.err.println("Incorrect locale supplied: " + args[0]);
+            String lang = args[0].toLowerCase(Locale.ROOT);
+            if(!"ruen".contains(lang)) {
+                lang = "en";
+            }
+
+            try {
+                Locale.setDefault(new Locale(lang));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 

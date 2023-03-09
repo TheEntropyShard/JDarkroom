@@ -36,6 +36,12 @@ public enum Decoder {
         }
 
         int index = (bytes[15] >> 3) & 0b111;
+        /*int index = 0;
+
+        String num = Integer.toBinaryString(bytes[15]);
+        if(num.length() <= 3) num += "000000";
+        System.out.println(num);
+        index = Integer.parseInt(num.substring(0, 4), 2) & 0b111;*/
 
         byte firstRoundKey = DecodingData.KEY[index];
         byte secondRoundKey = DecodingData.KEY[DecodingData.KEY.length - 1 - index];
@@ -63,14 +69,7 @@ public enum Decoder {
             bytes[byteInd] ^= (1 << bitInd);
         }
 
-        return Decoder.getGameInfo(bytes);
-    }
-
-    public static String getGameInfo(byte[] bytes) {
-        String resultLabel = I18N.getString("resultLabel");
-        String[] internetCodes = Decoder.readCode(bytes).split("_");
-        String totalPlaytime = Decoder.readTotalPlaytime(bytes);
-        return String.format(resultLabel, internetCodes[0], internetCodes[1], totalPlaytime);
+        return Decoder.readCode(bytes) + "_" + Decoder.readTotalPlaytime(bytes);
     }
 
     public static String readCode(byte[] bytes) {
@@ -100,8 +99,12 @@ public enum Decoder {
     }
 
     public static String readTotalPlaytime(byte[] bytes) {
-        return (bytes[14] < 10 ? "0" + bytes[14] : "" + bytes[14]) + ":" +
-               (bytes[13] < 10 ? "0" + bytes[13] : "" + bytes[13]) + ":" +
-               (bytes[15] < 10 ? "0" + bytes[15] : "" + bytes[15]);
+        int time = ((bytes[14] * 60 + bytes[13]) * 60 + bytes[15]);
+        int h = (int) Math.floor(time / 3600.0f);
+        int m = (int) Math.floor(time % 3600 / 60.0f);
+        int s = (int) Math.floor(time % 3600 % 60);
+        return (h < 10 ? "0" + h : "" + h) + ":" +
+                (m < 10 ? "0" + m : "" + m) + ":" +
+                (s < 10 ? "0" + s : "" + s);
     }
 }

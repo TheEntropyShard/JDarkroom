@@ -39,7 +39,6 @@ public final class View extends JPanel {
 
     private final JLabel resultLabel;
 
-    @SuppressWarnings("unchecked")
     public View() {
         this.setPreferredSize(new Dimension(View.WIDTH, View.HEIGHT));
 
@@ -87,6 +86,7 @@ public final class View extends JPanel {
                     public synchronized void drop(DropTargetDropEvent dtde) {
                         dtde.acceptDrop(DnDConstants.ACTION_COPY);
                         try {
+                            @SuppressWarnings("unchecked")
                             List<File> droppedFiles = (List<File>)
                                     dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                             String code = SaveFileReader.findInSave(droppedFiles.get(0));
@@ -152,7 +152,9 @@ public final class View extends JPanel {
                                         if(text.length() != 16) {
                                             resultLabel.setText(I18N.getString("incorrectCodeLength"));
                                         } else {
-                                            resultLabel.setText(Decoder.decodeInternetCode(text));
+                                            String rl = I18N.getString("resultLabel");
+                                            String[] data = Decoder.decodeInternetCode(text).split("_");
+                                            resultLabel.setText(String.format(rl, data[0], data[1], data[2]));
                                         }
                                         cardLayout.show(View.this, "resultPanel");
                                     });
